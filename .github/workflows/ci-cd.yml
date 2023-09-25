@@ -1,0 +1,33 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9, 3.10]
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Install Packages
+        run: make install  
+
+      - name: Lint
+        run: make lint 
+
+      - name: Test
+        run: make test  
+
+      - name: Format
+        run: make format 
